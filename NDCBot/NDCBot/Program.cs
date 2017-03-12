@@ -14,7 +14,8 @@ namespace NDCBot
     {
         static void Main(string[] args) => new Program().Start();
         private DiscordClient _client;
-        public string strPath = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().CodeBase);
+        public static string strPath = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().CodeBase);
+        public string token = Convert.ToString(File.ReadAllBytes(strPath.Substring(6) + "\\token.txt"));
         public void Start()
         {
             _client = new DiscordClient();
@@ -24,9 +25,8 @@ namespace NDCBot
                 if (!e.Message.IsAuthor)
                     await e.Channel.SendMessage(e.Message.Text);
             };
-            Console.WriteLine(strPath.Substring(6));
             _client.ExecuteAndWait(async () => {
-                await _client.Connect(Convert.ToString(File.ReadAllBytes(strPath.Substring(6) + "\token.txt")), TokenType.Bot);
+                await _client.Connect(token, TokenType.Bot);
             });
         }
     }
