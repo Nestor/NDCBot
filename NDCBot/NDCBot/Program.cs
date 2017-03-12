@@ -10,6 +10,7 @@ namespace NDCBot
     {
         static void Main(string[] args)
         {
+
         }
     }
 }
