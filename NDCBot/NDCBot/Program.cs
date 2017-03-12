@@ -15,7 +15,7 @@ namespace NDCBot
         static void Main(string[] args) => new Program().Start();
         private DiscordClient _client;
         public static string strPath = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().CodeBase);
-        public string token = Convert.ToString(File.ReadAllBytes(strPath.Substring(6) + "\\token.txt"));
+        private string token = File.ReadAllLines(strPath.Substring(6) + "\\token.txt", Encoding.UTF8)[0];
         public void Start()
         {
             _client = new DiscordClient();
