@@ -117,7 +117,7 @@ namespace NDCBot
                         await e.User.SendMessage("<https://github.com/nitsoftdeveloperscommunity/|GitHub>");
                         break;
                     default:
-                        await e.Channel.SendMessage("Unkown link.");
+                        await e.Channel.SendMessage("Unknown link.");
                         break;
                 }
             });
