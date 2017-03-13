@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Text;
 using Discord;
 using Discord.Commands;
@@ -18,9 +18,10 @@ namespace NDCBot
 
         public Bot()
         {
-            Console.WriteLine("Starting Bot...");
-            //Thread.Sleep(10000);
+            Console.WriteLine("Starting bot...");
             Run();
+            Console.Clear();
+            Console.WriteLine("Bot running...");
         }
 
         private void Run()
@@ -71,16 +72,14 @@ namespace NDCBot
                     {
                         using (Stream stream = response.GetResponseStream())
                         {
-                            using (StreamReader sr99 = new StreamReader(stream))
+                            using (StreamReader sr = new StreamReader(stream))
                             {
-                                responseContent = sr99.ReadToEnd();
+                                responseContent = sr.ReadToEnd();
                             }
                         }
                         Player Player = JsonConvert.DeserializeObject<Player[]>(responseContent)[0];
                         await e.Channel.SendMessage($"{Player.country} Player information for: ``{Player.username}``{'\n'}Profile: http://osu.ppy.sh/u/{Player.user_id}{'\n'}Total Score: {Player.total_score.ToString()}");
                         await e.Channel.SendMessage($"Accuracy: {Player.accuracy} {'\n'}Level: {Player.level}{'\n'}PP: {Player.pp_raw}");
-                        //await e.Channel.SendMessage(Player.total_score.ToString());
-
                     };
                 });
             _client.GetService<CommandService>().CreateCommand("agree")
@@ -111,7 +110,7 @@ namespace NDCBot
                 await _client.Connect(token, TokenType.Bot);
                 _client.SetStatus(UserStatus.Idle);
                 _client.SetGame("https://discord.gg/VnwqcHC");
-                
+
                 Console.WriteLine("Bot Online");
             });
         }
