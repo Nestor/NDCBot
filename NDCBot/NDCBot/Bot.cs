@@ -77,7 +77,7 @@ namespace NDCBot
                                 responseContent = sr.ReadToEnd();
                             }
                         }
-                        Player Player = JsonConvert.DeserializeObject<Player[]>(responseContent)[0];
+                        OsuPlayer Player = JsonConvert.DeserializeObject<OsuPlayer[]>(responseContent)[0];
                         await e.Channel.SendMessage($"{Player.country} Player information for: ``{Player.username}``{'\n'}Profile: http://osu.ppy.sh/u/{Player.user_id}{'\n'}Total Score: {Player.total_score.ToString()}");
                         await e.Channel.SendMessage($"Accuracy: {Player.accuracy} {'\n'}Level: {Player.level}{'\n'}PP: {Player.pp_raw}");
                     };
@@ -105,12 +105,27 @@ namespace NDCBot
                         await e.Server.GetUser(199273626686455818).SendMessage($"User **@{e.User.Name}#{e.User.Discriminator}** on server **{e.Server.Name}** tried to shutdown the bot. I don't think thats gonna happen.");
                     }
                 });
+            _client.GetService<CommandService>().CreateCommand("link")
+            .Description("Get one of the links related to this discord server.")
+            .Parameter("link", ParameterType.Required)
+            .Do(async e =>
+            {
+                switch (e.GetArg("link").ToLower())
+                {
+                    case "git":
+                    case "github":
+                        await e.User.SendMessage("<https://github.com/nitsoftdeveloperscommunity/|GitHub>");
+                        break;
+                    default:
+                        await e.Channel.SendMessage("Unkown link.");
+                        break;
+                }
+            });
             _client.ExecuteAndWait(async () =>
             {
                 await _client.Connect(token, TokenType.Bot);
                 _client.SetStatus(UserStatus.Idle);
                 _client.SetGame("https://discord.gg/VnwqcHC");
-
                 Console.WriteLine("Bot Online");
             });
         }
