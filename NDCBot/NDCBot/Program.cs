@@ -1,13 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Text;
-using Discord;
-using Discord.Commands;
-using System.IO;
-using System.Net;
-using System;
-using Newtonsoft.Json;
-
-namespace NDCBot
+﻿namespace NDCBot
 {
     class Program
     {
@@ -17,4 +8,3 @@ namespace NDCBot
         }
     }
 }
-
