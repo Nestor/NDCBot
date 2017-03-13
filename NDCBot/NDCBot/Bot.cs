@@ -43,7 +43,11 @@ namespace NDCBot
                 }
             };
 
-
+            _client.UserJoined += async (s, e) =>
+            {
+                await e.Server.DefaultChannel.SendMessage($"Please welcome **{e.User.Mention}** to **{e.Server.Name}**!");
+                await e.Server.GetChannel(285491947693408257).SendMessage($"User {e.User.Mention} joined.");
+            };
 
             _client.GetService<CommandService>().CreateCommand("osu")
                 .Alias(new string[] { "osuinfo", "osuplayer" })
@@ -73,7 +77,7 @@ namespace NDCBot
                             }
                         }
                         Player Player = JsonConvert.DeserializeObject<Player[]>(responseContent)[0];
-                        await e.Channel.SendMessage($"Player information for: ``{Player.username}``{'\n'}Profile: http://osu.ppy.sh/u/{Player.user_id}{'\n'}Total Score: {Player.total_score.ToString()}");
+                        await e.Channel.SendMessage($"{Player.country} Player information for: ``{Player.username}``{'\n'}Profile: http://osu.ppy.sh/u/{Player.user_id}{'\n'}Total Score: {Player.total_score.ToString()}");
                         await e.Channel.SendMessage($"Accuracy: {Player.accuracy} {'\n'}Level: {Player.level}{'\n'}PP: {Player.pp_raw}");
                         //await e.Channel.SendMessage(Player.total_score.ToString());
 
@@ -89,10 +93,18 @@ namespace NDCBot
                 .Description("Shuts the bot down.")
                 .Do(async e =>
                 {
-                    await e.Server.DefaultChannel.SendMessage("Shutting down for repairs! :wrench: :wave:");
-                    Thread.Sleep(1000);
-                    await _client.Disconnect();
-                    Environment.Exit(0);
+                    if (e.User.Id == 199273626686455818)
+                    {
+                        await e.Server.DefaultChannel.SendMessage("Shutting down for repairs! :wrench: :wave:");
+                        Thread.Sleep(1000);
+                        await _client.Disconnect();
+                        Environment.Exit(0);
+                    }
+                    else
+                    {
+                        await e.Channel.SendMessage("No thanks.");
+                        await e.Server.GetUser(199273626686455818).SendMessage($"User **@{e.User.Name}#{e.User.Discriminator}** on server **{e.Server.Name}** tried to shutdown the bot. I don't think thats gonna happen.");
+                    }
                 });
             _client.ExecuteAndWait(async () =>
             {
