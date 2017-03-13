@@ -113,7 +113,7 @@ namespace NDCBot
                 {
                     case "git":
                     case "github":
-                        await e.User.SendMessage("<https://github.com/nitsoftdeveloperscommunity/|GitHub>");
+                        await e.User.SendMessage("(https://github.com/nitsoftdeveloperscommunity/)[GitHub]");
                         break;
                     default:
                         await e.Channel.SendMessage("Unkown link.");
