@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Text;
 using Discord;
 using Discord.Commands;
@@ -18,9 +18,10 @@ namespace NDCBot
 
         public Bot()
         {
-            Console.WriteLine("Starting Bot...");
-            //Thread.Sleep(10000);
+            Console.WriteLine("Starting bot...");
             Run();
+            Console.Clear();
+            Console.WriteLine("Bot running...");
         }
 
         private void Run()
@@ -71,9 +72,9 @@ namespace NDCBot
                     {
                         using (Stream stream = response.GetResponseStream())
                         {
-                            using (StreamReader sr99 = new StreamReader(stream))
+                            using (StreamReader sr = new StreamReader(stream))
                             {
-                                responseContent = sr99.ReadToEnd();
+                                responseContent = sr.ReadToEnd();
                             }
                         }
                         OsuPlayer Player = JsonConvert.DeserializeObject<OsuPlayer[]>(responseContent)[0];
