@@ -7,25 +7,25 @@ using System.Net;
 using System;
 using Newtonsoft.Json;
 using System.Threading;
+using System.Linq;
 
 namespace NDCBot
 {
     class Bot
     {
         private DiscordClient _client;
-        public static string strPath = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().CodeBase);
         private string token;
-
         public Bot()
         {
             Console.WriteLine("Starting bot...");
             try
             {
-                token = File.ReadAllLines(Environment.CurrentDirectory + @"\token.txt", Encoding.UTF8)[0];
+                token = File.ReadAllLines(Environment.CurrentDirectory + @"\t.token", Encoding.UTF8)[0];
             }
             catch (FileNotFoundException)
             {
-                Console.WriteLine("Failed to find token.txt! Press any key to exit...");
+                Console.WriteLine("Failed to find token.txt! Automatically made one. Press any key to exit...");
+                File.Create(Environment.CurrentDirectory + @"\t.token");
                 Console.ReadKey();
                 Environment.Exit(1);
             }
@@ -104,6 +104,34 @@ namespace NDCBot
                 {
                     await e.User.AddRoles(e.Server.GetRole(285639013602164737));
                 });
+            _client.GetService<CommandService>().CreateCommand("kick")
+                .Description("Kicks a user.")
+                .Parameter("user", ParameterType.Required)
+                .Do(async e =>
+                {
+                    if (e.User.ServerPermissions.KickMembers)
+                    {
+                        User user = null;
+                        try
+                        {
+                            user = e.Server.FindUsers(e.GetArg("User")).First();
+                        }
+                        catch (InvalidOperationException)
+                        {
+                            await e.Channel.SendMessage($"User {e.GetArg("user")} not found.");
+                        }
+
+                        if (user != null)
+                        {
+                            await user.Kick();
+                            await e.Channel.SendMessage($"{user.Name} was kicked from the server!");
+                        }
+                        else
+                        {
+                            await e.Channel.SendMessage($"User {e.GetArg("user")} not found.");
+                        }
+                    }
+                });
             _client.GetService<CommandService>().CreateCommand("shutdown")
                 .Description("Shuts the bot down.")
                 .Do(async e =>
@@ -140,7 +168,7 @@ namespace NDCBot
             _client.ExecuteAndWait(async () =>
             {
                 await _client.Connect(token, TokenType.Bot);
-                _client.SetStatus(UserStatus.Idle);
+                _client.SetStatus(UserStatus.DoNotDisturb);
                 _client.SetGame("https://discord.gg/VnwqcHC");
                 Console.WriteLine("Bot Online");
             });
