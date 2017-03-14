@@ -114,10 +114,10 @@ namespace NDCBot
                         User user = null;
                         //try
                         //{
-                            user = e.Server.FindUsers(e.GetArg("user")).First();
+                            user = e.Server.FindUsers(e.GetArg("user")).FirstOrDefault();
                         //}
-
-                        if (user != null)
+                        // Workpls
+                        if (null != user)
                         {
                             Console.WriteLine(user);
                             await user.Kick();
