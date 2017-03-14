@@ -114,7 +114,7 @@ namespace NDCBot
                         User user = null;
                         try
                         {
-                            user = e.Server.FindUsers(e.GetArg("User")).First();
+                            user = e.Server.FindUsers(e.GetArg("user")).First();
                         }
                         catch (InvalidOperationException)
                         {
