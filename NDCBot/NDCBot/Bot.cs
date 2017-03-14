@@ -112,21 +112,18 @@ namespace NDCBot
                     if (e.User.ServerPermissions.KickMembers)
                     {
                         User user = null;
-                        try
-                        {
+                        //try
+                        //{
                             user = e.Server.FindUsers(e.GetArg("user")).First();
-                        }
-                        catch (InvalidOperationException)
-                        {
-                            await e.Channel.SendMessage($"User {e.GetArg("user")} not found.");
-                        }
+                        //}
 
                         if (user != null)
                         {
+                            Console.WriteLine(user);
                             await user.Kick();
                             await e.Channel.SendMessage($"{user.Name} was kicked from the server!");
                         }
-                        else
+                        if (user == null)
                         {
                             await e.Channel.SendMessage($"User {e.GetArg("user")} not found.");
                         }
