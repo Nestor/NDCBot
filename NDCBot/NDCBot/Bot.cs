@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Text;
 using Discord;
 using Discord.Commands;
@@ -14,11 +14,27 @@ namespace NDCBot
     {
         private DiscordClient _client;
         public static string strPath = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().CodeBase);
-        private string token = File.ReadAllLines(strPath.Substring(6) + "\\token.txt", Encoding.UTF8)[0];
+        private string token;
 
         public Bot()
         {
             Console.WriteLine("Starting bot...");
+            try
+            {
+                token = File.ReadAllLines(Environment.CurrentDirectory + @"\token.txt", Encoding.UTF8)[0];
+            }
+            catch (FileNotFoundException)
+            {
+                Console.WriteLine("Failed to find token.txt! Press any key to exit...");
+                Console.ReadKey();
+                Environment.Exit(1);
+            }
+            catch (IndexOutOfRangeException)
+            {
+                Console.WriteLine("token.txt file is empty! Press any key to exit...");
+                Console.ReadKey();
+                Environment.Exit(1);
+            }
             Run();
             Console.Clear();
             Console.WriteLine("Bot running...");
@@ -92,7 +108,7 @@ namespace NDCBot
                 .Description("Shuts the bot down.")
                 .Do(async e =>
                 {
-                    if (e.User.Id == 199273626686455818)
+                    if (e.User.ServerPermissions.Administrator)
                     {
                         await e.Server.DefaultChannel.SendMessage("Shutting down for repairs! :wrench: :wave:");
                         Thread.Sleep(1000);
@@ -114,7 +130,7 @@ namespace NDCBot
                 {
                     case "git":
                     case "github":
-                        await e.User.SendMessage("(https://github.com/nitsoftdeveloperscommunity/)[GitHub]");
+                        await e.User.SendMessage("https://github.com/nitsoftdeveloperscommunity/");
                         break;
                     default:
                         await e.Channel.SendMessage("Unknown link.");
