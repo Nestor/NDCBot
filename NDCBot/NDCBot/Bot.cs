@@ -24,14 +24,14 @@ namespace NDCBot
             }
             catch (FileNotFoundException)
             {
-                Console.WriteLine("Failed to find token.txt! Automatically made one. Press any key to exit...");
+                Console.WriteLine("Failed to find t.token! Automatically made one. Press any key to exit...");
                 File.Create(Environment.CurrentDirectory + @"\t.token");
                 Console.ReadKey();
                 Environment.Exit(1);
             }
             catch (IndexOutOfRangeException)
             {
-                Console.WriteLine("token.txt file is empty! Press any key to exit...");
+                Console.WriteLine("t.token file is empty! Press any key to exit...");
                 Console.ReadKey();
                 Environment.Exit(1);
             }
